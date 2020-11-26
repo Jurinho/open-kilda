@@ -15,41 +15,45 @@
 
 package org.openkilda.floodlight.command.flow.ingress.of;
 
-import org.openkilda.floodlight.command.flow.ingress.IngressFlowSegmentBase;
-import org.openkilda.floodlight.switchmanager.SwitchManager;
-import org.openkilda.floodlight.utils.OfFlowModAddMultiTableMessageBuilderFactory;
+import org.openkilda.floodlight.command.flow.ingress.IngressFlowLoopCommand;
+import org.openkilda.floodlight.utils.OfFlowModBuilderFactory;
 import org.openkilda.model.SwitchFeature;
 
 import net.floodlightcontroller.core.IOFSwitch;
 import org.projectfloodlight.openflow.protocol.action.OFAction;
 import org.projectfloodlight.openflow.protocol.instruction.OFInstruction;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-public class IngressFlowLoopInstallMultiTableFlowModFactory extends IngressInstallFlowModFactory {
-    public IngressFlowLoopInstallMultiTableFlowModFactory(
-            IngressFlowSegmentBase command, IOFSwitch sw, Set<SwitchFeature> features) {
-        super(new OfFlowModAddMultiTableMessageBuilderFactory(SwitchManager.FLOW_LOOP_PRIORITY), command, sw, features);
-    }
+abstract class IngressFlowLoopFlowModFactory extends IngressInstallFlowModFactory {
+    private final IngressFlowLoopCommand command;
 
-    @Override
-    protected List<OFAction> makeServer42IngressFlowTransformActions(List<Integer> vlanStack) {
-        return null;
+    public IngressFlowLoopFlowModFactory(
+            OfFlowModBuilderFactory flowModBuilderFactory, IngressFlowLoopCommand command, IOFSwitch sw,
+            Set<SwitchFeature> features) {
+        super(flowModBuilderFactory, command, sw, features);
+        this.command = command;
     }
 
     @Override
     protected List<OFAction> makeTransformActions(List<Integer> vlanStack) {
-        return null;
+        return Collections.emptyList();
     }
 
     @Override
-    protected List<OFInstruction> makeMetadataInstructions() {
-        return null;
+    protected List<OFAction> makeServer42IngressFlowTransformActions(List<Integer> vlanStack) {
+        return Collections.emptyList();
     }
 
     @Override
     protected OFAction makeOutputAction() {
         return null;
+    }
+
+    @Override
+    protected List<OFInstruction> makeMetadataInstructions() {
+        return Collections.emptyList();
     }
 }
