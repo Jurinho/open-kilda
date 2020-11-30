@@ -117,10 +117,6 @@ public class FlowValidator {
                 throw new InvalidFlowException("Loop switch is not terminating in flow path",
                         ErrorType.PARAMETERS_INVALID);
             }
-
-            if (flow.isLooped() && !loopSwitchId.equals(flow.getLoopSwitchId())) {
-                throw new InvalidFlowException("Can't change loop switch", ErrorType.PARAMETERS_INVALID);
-            }
         }
     }
 
@@ -168,17 +164,6 @@ public class FlowValidator {
         baseFlowValidate(secondFlow, Sets.newHashSet(firstFlow.getFlowId()));
 
         checkForEqualsEndpoints(firstFlow, secondFlow);
-        //todo: fix swap endpoints for looped flows
-        boolean firstFlowLooped = flowRepository.findById(firstFlow.getFlowId())
-                .map(f -> f.getLoopSwitchId() != null)
-                .orElse(false);
-        boolean secondFlowLooped = flowRepository.findById(secondFlow.getFlowId())
-                .map(f -> f.getLoopSwitchId() != null)
-                .orElse(false);
-        if (firstFlowLooped || secondFlowLooped) {
-            throw new InvalidFlowException("Swap endpoints is not implemented for looped flows",
-                    ErrorType.NOT_IMPLEMENTED);
-        }
     }
 
     @VisibleForTesting

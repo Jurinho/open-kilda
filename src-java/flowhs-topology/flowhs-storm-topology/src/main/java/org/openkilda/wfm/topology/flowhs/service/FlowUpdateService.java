@@ -84,8 +84,6 @@ public class FlowUpdateService {
      */
 
     public void handleUpdateRequest(String key, CommandContext commandContext, FlowRequest request) {
-        Optional<Flow> flow = flowRepository.findById(request.getFlowId());
-        request.setLoopSwitchId(flow.map(Flow::getLoopSwitchId).orElse(null));
         handleRequest(key, commandContext, request);
     }
 
