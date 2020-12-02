@@ -842,7 +842,9 @@ class QinQFlowSpec extends HealthCheckSpecification {
         assumeTrue("Unable to find required switches in topology", (allTraffGenSwitches.size() > 1))
         def swP = topologyHelper.getAllNeighboringSwitchPairs().find {
             [it.src, it.dst].every { sw ->
-                sw.dpId in allTraffGenSwitches*.dpId && northbound.getSwitchProperties(sw.dpId).multiTable
+                sw.dpId in allTraffGenSwitches*.dpId && northbound.getSwitchProperties(sw.dpId).multiTable &&
+                        northbound.getSwitchProperties(sw.dpId).supportedTransitEncapsulation
+                                .contains(FlowEncapsulationType.VXLAN.toString().toLowerCase())
             }
         } ?: assumeTrue("Not able to find enough switches with traffgens and in multi-table mode", false)
 
